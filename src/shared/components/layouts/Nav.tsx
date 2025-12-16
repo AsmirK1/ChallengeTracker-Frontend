@@ -1,21 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-type StoredUser = {
-  id: number;
-  email: string;
-  token: string;
-};
-
-const getUserFromStorage = (): StoredUser | null => {
-  const raw = localStorage.getItem("ct_user");
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as StoredUser;
-  } catch {
-    return null;
-  }
-};
+import {
+  clearUserFromStorage,
+  getUserFromStorage,
+  type StoredUser,
+} from "../../auth/userStorage";
 
 const Nav = () => {
   const navigate = useNavigate();
@@ -28,7 +18,7 @@ const Nav = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("ct_user");
+    clearUserFromStorage();
     setUser(null);
     navigate("/login");
   };
@@ -53,12 +43,17 @@ const Nav = () => {
             </Link>
             
             {user ? (
-              <button
-                onClick={handleLogout}
-                className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 transition-colors"
-              >
-                Logout
-              </button>
+              <>
+                <span className="hidden sm:inline text-sm text-slate-300">
+                  Hi, <span className="font-semibold text-white">{user.displayName}</span>
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <>
                 <Link 

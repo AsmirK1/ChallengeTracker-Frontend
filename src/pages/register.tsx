@@ -1,7 +1,9 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5295";
+import { saveUserToStorage } from "../shared/auth/userStorage";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000";
 
 export const RegisterPage = () => {
 	const [error, setError] = useState<string | null>(null);
@@ -37,11 +39,12 @@ export const RegisterPage = () => {
 
 			const payload = await res.json();
 			const user = {
-				id: payload.userId,
+				id: typeof payload.userId === "string" ? payload.userId : String(payload.userId),
 				email: payload.email,
+				displayName: payload.displayName ?? payload.email,
 				token: payload.token,
 			};
-			localStorage.setItem("ct_user", JSON.stringify(user));
+			saveUserToStorage(user);
 			window.location.href = "/";
 		} catch (err) {
 			if (err instanceof Error) {

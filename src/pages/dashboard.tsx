@@ -1,22 +1,13 @@
 import { useEffect, useState } from "react";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5295";
+import {
+  clearUserFromStorage,
+  getUserFromStorage,
+  saveUserToStorage,
+  type StoredUser,
+} from "../shared/auth/userStorage";
 
-type StoredUser = {
-  id: number;
-  email: string;
-  token: string;
-};
-
-const getUserFromStorage = (): StoredUser | null => {
-  const raw = localStorage.getItem("ct_user");
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as StoredUser;
-  } catch {
-    return null;
-  }
-};
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000";
 
 export const DashboardPage = () => {
   const [user, setUser] = useState<StoredUser | null>(() => getUserFromStorage());
@@ -52,16 +43,17 @@ export const DashboardPage = () => {
 
         const data = await res.json();
         const nextUser: StoredUser = {
-          id: data.userId,
+          id: typeof data.userId === "string" ? data.userId : String(data.userId),
           email: data.email,
+          displayName: data.displayName ?? data.email,
           token: user.token,
         };
-        localStorage.setItem("ct_user", JSON.stringify(nextUser));
+        saveUserToStorage(nextUser);
         setUser(nextUser);
       } catch (err) {
         console.error(err);
         setError("Session expired. Please log in again.");
-        localStorage.removeItem("ct_user");
+        clearUserFromStorage();
         setUser(null);
       } finally {
         setLoading(false);
@@ -89,7 +81,7 @@ export const DashboardPage = () => {
         {loading && <p className="text-sm text-slate-400 mb-2">Loading your profile...</p>}
         {error && <p className="text-sm text-red-400 mb-2">{error}</p>}
         <p className="text-lg text-slate-200">
-          Hello <span className="font-semibold text-indigo-300">{user.email}</span>, get ready to track your next challenge.
+          Hello <span className="font-semibold text-indigo-300">{user.displayName}</span>, get ready to track your next challenge.
         </p>
       </section>
     </main>
