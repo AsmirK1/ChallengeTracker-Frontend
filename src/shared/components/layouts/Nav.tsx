@@ -41,6 +41,18 @@ const Nav = () => {
             >
               Home
             </Link>
+            <Link
+              to="/createchallenge"
+              className="text-slate-300 hover:text-white transition-colors text-sm sm:text-base"
+            >
+              Create Challenge
+            </Link>
+            <Link
+              to="/challengelist"
+              className="text-slate-300 hover:text-white transition-colors text-sm sm:text-base"
+            >
+              Browse Challenge
+            </Link>
             
             {user ? (
               <>

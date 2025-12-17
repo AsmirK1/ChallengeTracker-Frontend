@@ -1,11 +1,13 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { LoginPage } from "@/pages/login";
 import { RegisterPage } from "@/pages/register";
-import { CreateChallengePage } from "@/pages/create-challenge";
+import { CreateChallengePage } from "@/pages/createchallenge";
+import { ChallengeListPage } from "@/pages/challengelist";
 import { ChallengeDetailPage } from "@/pages/challenge-detail";
 import { DashboardPage } from "@/pages/dashboard";
 import Nav from "@/shared/components/layouts/Nav";
 import Footer from "@/shared/components/layouts/Footer";
+import { ChallengeList } from "@/features/challenges";
 
 const RootLayout = () => (
   <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
@@ -26,6 +28,8 @@ export const router = createBrowserRouter([
       { index: true, element: <DashboardPage /> },
       { path: "login", element: <LoginPage /> },
   { path: "register", element: <RegisterPage /> },
+  { path: "createchallenge", element: <CreateChallengePage/> },
+  { path: "challengelist", element: <ChallengeListPage/> },
   { path: "create", element: <CreateChallengePage /> },
       { path: "challenges/:id", element: <ChallengeDetailPage /> },
     ],
