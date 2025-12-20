@@ -1,3 +1,5 @@
+import { Leaderboard } from "@/features/leaderboard";
+
 export const LeaderboardPage = () => {
-    return <div>Leaderboard Page Placeholder</div>;
+  return <Leaderboard />;
 };

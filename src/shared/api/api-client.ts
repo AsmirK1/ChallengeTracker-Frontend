@@ -1,6 +1,13 @@
-import axios from "axios";
+import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
 
 // Just boilerplate setup needs to be done correctly
+type TypedApi = Omit<AxiosInstance, "get" | "post" | "put" | "patch" | "delete"> & {
+  get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
+  post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T>;
+  put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T>;
+  patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T>;
+  delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T>;
+};
 
 // Creates Axios instance
 export const api = axios.create({
@@ -8,7 +15,7 @@ export const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-});
+}) as TypedApi;
 
 // Auto inject Auth Token
 api.interceptors.request.use(
