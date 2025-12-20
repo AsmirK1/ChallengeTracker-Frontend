@@ -6,6 +6,7 @@ import { ChallengeListPage } from "@/pages/challengelist";
 import { ChallengeDetailPage } from "@/pages/challenge-detail";
 import { DashboardPage } from "@/pages/dashboard";
 import { LeaderboardPage } from "@/pages/leaderboard";
+import { ErrorPage } from "@/shared/components/ui/ErrorPage";
 import Nav from "@/shared/components/layouts/Nav";
 import Footer from "@/shared/components/layouts/Footer";
 
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <DashboardPage /> },
       { path: "login", element: <LoginPage /> },
