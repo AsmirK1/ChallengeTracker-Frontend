@@ -1,84 +1,120 @@
-## ChallengeTracker Frontend
+# ChallengeTracker Frontend
 
-React 19 + Vite + TypeScript client for ChallengeTracker. It handles authentication, challenge browsing, and progress tracking via the backend API.
+A modern React 19 application for tracking personal and group challenges. Built with Vite, TypeScript, and Tailwind CSS, following a feature-based architecture.
 
-> Need the API instructions? See `../ChallengeTracker-Backend/readme.md`.
+This project implements the frontend requirements for the ChallengeTracker system, providing a responsive and interactive user interface for managing challenges, memberships, and progress.
+
+> **Backend API**: For the server-side implementation and API documentation, please refer to the [Backend README](../ChallengeTracker-Backend/readme.md).
 
 ---
 
-## Prerequisites
+## 🚀 Features & Functional Requirements
+
+This application implements the following functional requirements we had for this group project(FRs):
+
+### 🏗️ Core Architecture (FR017, FR018)
+
+- **Tech Stack**: React 19, Vite, TypeScript.
+- **State Management**: TanStack Query for server state, React Context for Auth.
+- **Routing**: React Router v7 with protected routes (AuthGuard).
+- **Structure**: Feature-based folder structure (`features/`, `shared/`, `pages/`) for scalability.
+
+### 🔐 Authentication (FR019)
+
+- **User Flows**: Login and Registration pages.
+- **Security**: JWT storage in memory/localStorage.
+- **Context**: Global `AuthContext` exposing user state and login/logout methods.
+
+### 📊 Dashboard (FR020)
+
+- **My Challenges**: View all active and joined challenges.
+- **Discover**: Browse public challenges available for joining.
+- **Optimized Loading**: Uses data loaders for efficient data fetching.
+
+### 🏆 Challenge Management (FR021, FR022)
+
+- **Create Challenge**: Form with Zod validation for creating new challenges.
+- **Challenge Details**: Comprehensive view showing:
+  - Challenge info and status.
+  - Current members and leaderboard.
+  - Today's progress summary.
+- **Actions**: Join/Leave challenges, Start/Complete challenges (for owners).
+
+### 📈 Progress Tracking (FR021, FR009)
+
+- **Log Progress**: Intuitive form to log daily activity.
+- **Validation**: Enforces rules (amount > 0, date windows).
+- **Visuals**: Progress bars and recent activity logs.
+
+### ⚡ User Experience (FR023)
+
+- **Error Handling**: User-friendly error messages mapped from API ProblemDetails.
+- **Optimistic UI**: Immediate feedback on actions with rollback on failure.
+- **Responsive Design**: Mobile-first UI using Tailwind CSS.
+
+---
+
+## 🛠️ Project Structure
+
+```
+src/
+├── app/                # App configuration (Router, Provider)
+├── features/           # Feature-based modules
+│   ├── auth/           # Authentication logic & forms
+│   ├── challenges/     # Challenge management
+│   ├── dashboard/      # Dashboard views
+│   ├── leaderboard/    # Leaderboard components
+│   ├── memberships/    # Membership actions
+│   └── progress/       # Progress logging
+├── pages/              # Route components
+├── shared/             # Shared utilities & UI components
+│   ├── api/            # API client & Query setup
+│   ├── components/     # Reusable UI (Button, Input, etc.)
+│   └── constants.ts    # App-wide constants (Enums)
+└── main.tsx            # Entry point
+```
+
+---
+
+## ⚡ Getting Started
+
+### Prerequisites
 
 | Tool    | Version         | Notes                              |
 | ------- | --------------- | ---------------------------------- |
 | Node.js | ≥ 20 LTS        | Required for Vite dev server/build |
 | npm     | ships with Node | Replace with yarn/pnpm if desired  |
 
-Clone the repo and install dependencies:
+### Installation
 
-```bash
-git clone <repo-url> ChallengeTracker
-cd ChallengeTracker/ChallengeTracker-Frontend
-npm install
-```
+1.  Clone the repository:
 
----
+    ```bash
+    git clone <repo-url> ChallengeTracker
+    cd ChallengeTracker/ChallengeTracker-Frontend
+    ```
 
-## Environment configuration
+2.  Install dependencies:
 
-The client reads the backend base URL from `VITE_API_BASE_URL`.
+    ```bash
+    npm install
+    ```
 
-Create `.env.local` (or edit `.env`) in `ChallengeTracker-Frontend/`:
+3.  Configure Environment:
+    Create a `.env` file in the root directory:
 
-```bash
-VITE_API_BASE_URL=http://localhost:5000
-```
+    ```env
+    VITE_API_BASE_URL=http://localhost:5000
+    ```
 
-Set the value to match the backend port (e.g., `http://localhost:5055` if you changed it). Vite automatically loads `.env.local`.
+    _Ensure this matches your running backend port._
 
----
+4.  Run the development server:
 
-## Running locally
+    ```bash
+    npm run dev
+    ```
 
-Backend must be running first (see backend README). Then start the frontend:
-
-```bash
-npm run dev
-```
-
-Open the URL shown in the console (default `http://localhost:5173`). Axios automatically attaches the JWT from `localStorage` to requests once you log in.
+5.  Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
-
-## Build, lint, and preview
-
-```bash
-# Type-check + build production bundle
-npm run build
-
-# Preview built assets locally
-npm run preview
-
-# ESLint (React + TypeScript rules)
-npm run lint
-```
-
-TanStack Query handles server state caching, Tailwind CSS (via `@tailwindcss/vite`) powers styling, and React Router controls navigation.
-
----
-
-## Troubleshooting
-
-| Issue                                                   | Fix                                                                                                                                                                              |
-| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| API requests fail with `ERR_CONNECTION_REFUSED`         | Ensure the backend console shows “Now listening …” and that `VITE_API_BASE_URL` matches its URL.                                                                                 |
-| Login succeeds but subsequent calls are unauthenticated | Inspect DevTools → Application → Local Storage for `token`. If missing, verify the backend response and ensure interceptors are configured (see `src/shared/api/api-client.ts`). |
-| Tailwind styles missing                                 | Restart `npm run dev` after modifying Tailwind config.                                                                                                                           |
-| Vite can’t find `@/...` imports                         | The alias is defined in `vite.config.ts`; avoid deleting it.                                                                                                                     |
-
----
-
-## Deployment tips
-
-- `npm run build` outputs the production bundle in `dist/`. Serve it via any static host (Netlify, Vercel, Azure Static Web Apps, etc.).
-- Remember to set `VITE_API_BASE_URL` (or an equivalent env var) during deploy so the client knows how to reach the backend.
-- For containerization, pair this build step with a lightweight Nginx/Apache image.
