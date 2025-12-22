@@ -1,7 +1,16 @@
 // Components
-export { AuthProvider, useAuth } from "./components/AuthProvider";
+export { AuthProvider } from "./components/AuthProvider";
 export { LoginForm } from "./components/LoginForm";
 export { RegisterForm } from "./components/RegisterForm";
 
-// Types
-export * from "./types";
+// Hooks
+export * from "./hooks";
+
+// Actions
+export * from "./actions";
+
+// Schemas & Validation
+export * from "./schemas";
+
+// API
+export * from "./api";

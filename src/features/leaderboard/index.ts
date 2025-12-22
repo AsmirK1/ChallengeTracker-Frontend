@@ -1,5 +1,5 @@
-// Components
-export { Leaderboard } from "./components/Leaderboard";
+// Schemas
+export * from "./schemas";
 
-// Types
-export * from "./types";
+// API
+export * from "./api";
